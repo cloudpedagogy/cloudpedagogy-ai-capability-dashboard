@@ -1,0 +1,19 @@
+period_start,period_end,domain,band,count,context_tag
+YYYY-MM-DD,YYYY-MM-DD,Awareness,emerging,0,education
+YYYY-MM-DD,YYYY-MM-DD,Awareness,developing,0,education
+YYYY-MM-DD,YYYY-MM-DD,Awareness,embedded,0,education
+YYYY-MM-DD,YYYY-MM-DD,Human–AI Co-Agency,emerging,0,education
+YYYY-MM-DD,YYYY-MM-DD,Human–AI Co-Agency,developing,0,education
+YYYY-MM-DD,YYYY-MM-DD,Human–AI Co-Agency,embedded,0,education
+YYYY-MM-DD,YYYY-MM-DD,Applied Practice & Innovation,emerging,0,education
+YYYY-MM-DD,YYYY-MM-DD,Applied Practice & Innovation,developing,0,education
+YYYY-MM-DD,YYYY-MM-DD,Applied Practice & Innovation,embedded,0,education
+YYYY-MM-DD,YYYY-MM-DD,Ethics, Equity & Impact,emerging,0,education
+YYYY-MM-DD,YYYY-MM-DD,Ethics, Equity & Impact,developing,0,education
+YYYY-MM-DD,YYYY-MM-DD,Ethics, Equity & Impact,embedded,0,education
+YYYY-MM-DD,YYYY-MM-DD,Decision-Making & Governance,emerging,0,education
+YYYY-MM-DD,YYYY-MM-DD,Decision-Making & Governance,developing,0,education
+YYYY-MM-DD,YYYY-MM-DD,Decision-Making & Governance,embedded,0,education
+YYYY-MM-DD,YYYY-MM-DD,Reflection, Learning & Renewal,emerging,0,education
+YYYY-MM-DD,YYYY-MM-DD,Reflection, Learning & Renewal,developing,0,education
+YYYY-MM-DD,YYYY-MM-DD,Reflection, Learning & Renewal,embedded,0,education

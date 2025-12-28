@@ -20,14 +20,22 @@ export default function EmptyState(props: {
       </div>
 
       <div style={{ marginTop: 6, opacity: 0.85 }}>
-        Upload aggregated CSV/JSON, or use a demo dataset.
+        Upload aggregated CSV or JSON, or use a demo dataset.
       </div>
 
       <div style={{ marginTop: 6, opacity: 0.85 }}>
         Interpretation requires context and professional judgement.
       </div>
 
-      <div style={{ marginTop: 14, display: "flex", gap: 10, flexWrap: "wrap" }}>
+      {/* ───────── Demo buttons ───────── */}
+      <div
+        style={{
+          marginTop: 14,
+          display: "flex",
+          gap: 10,
+          flexWrap: "wrap",
+        }}
+      >
         <button
           onClick={props.onUseBaselineDemo}
           style={{
@@ -35,6 +43,7 @@ export default function EmptyState(props: {
             borderRadius: 12,
             border: "1px solid rgba(0,0,0,0.2)",
             cursor: "pointer",
+            background: "transparent",
           }}
         >
           Use baseline demo
@@ -47,12 +56,14 @@ export default function EmptyState(props: {
             borderRadius: 12,
             border: "1px solid rgba(0,0,0,0.2)",
             cursor: "pointer",
+            background: "transparent",
           }}
         >
           Use intervention scenario
         </button>
       </div>
 
+      {/* ───────── Demo explanation ───────── */}
       <div style={{ marginTop: 12, fontSize: 13 }}>
         <div style={{ fontWeight: 650 }}>
           Why two demos?
@@ -64,8 +75,49 @@ export default function EmptyState(props: {
         </div>
 
         <div style={{ marginTop: 6, opacity: 0.8 }}>
-          Baseline demo shows steady, incremental change. The intervention scenario shows uneven development
-          (e.g. practice improves faster than governance).
+          The baseline demo shows steady, incremental change. The intervention scenario shows uneven development
+          (for example, applied practice improving faster than governance).
+        </div>
+      </div>
+
+      {/* ───────── Templates ───────── */}
+      <div style={{ marginTop: 14, fontSize: 13, opacity: 0.9 }}>
+        <div style={{ fontWeight: 650 }}>
+          Templates for uploading your own data
+        </div>
+
+        <div
+          style={{
+            marginTop: 6,
+            display: "flex",
+            gap: 12,
+            flexWrap: "wrap",
+          }}
+        >
+          <a
+            href="/templates/ai-capability-dashboard-template.csv"
+            download
+          >
+            Download CSV template
+          </a>
+
+          <a
+            href="/templates/ai-capability-dashboard-example.csv"
+            download
+          >
+            Download example CSV
+          </a>
+
+          <a
+            href="/templates/ai-capability-dashboard-template.json"
+            download
+          >
+            Download JSON template
+          </a>
+        </div>
+
+        <div style={{ marginTop: 6, opacity: 0.8 }}>
+          Templates use aggregate counts only. Do not include individual-level or identifiable data.
         </div>
       </div>
     </div>

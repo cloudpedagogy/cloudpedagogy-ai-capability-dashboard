@@ -1,48 +1,77 @@
-import { parseCSV } from "../engine/parseCsv"
-import { validateDatasetJson, type AggregatedRow } from "../engine/schema"
+import { ChangeEvent } from "react"
+import { parseCsv } from "../engine/parseCsv"
+import type { AggregatedRow } from "../engine/schema"
 
 export default function FileLoader(props: {
   onLoaded: (rows: AggregatedRow[]) => void
-  onError: (msg: string) => void
+  onError: (message: string) => void
 }) {
-  async function onUpload(file: File) {
-    try {
-      const text = await file.text()
-      const ext = file.name.toLowerCase().split(".").pop()
+  function onFileChange(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
 
-      if (ext === "json") {
-        const obj = JSON.parse(text)
-        if (!validateDatasetJson(obj)) {
-          throw new Error('Invalid JSON. Expected { schema_version:"1.0", rows:[...] } with valid rows.')
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      try {
+        const text = String(reader.result)
+
+        if (file.name.toLowerCase().endsWith(".json")) {
+          const data = JSON.parse(text)
+          props.onLoaded(data as AggregatedRow[])
+        } else {
+          const rows = parseCsv(text)
+          props.onLoaded(rows)
         }
-        props.onLoaded(obj.rows)
-        return
+      } catch (err) {
+        props.onError(
+          err instanceof Error
+            ? err.message
+            : "Could not parse the uploaded file."
+        )
       }
-
-      if (ext === "csv") {
-        const rows = parseCSV(text)
-        props.onLoaded(rows)
-        return
-      }
-
-      throw new Error("Unsupported file type. Upload a .csv or .json file.")
-    } catch (e: any) {
-      props.onError(e?.message ?? "Failed to load dataset.")
     }
+
+    reader.onerror = () => {
+      props.onError("Could not read the uploaded file.")
+    }
+
+    reader.readAsText(file)
+
+    // reset input so the same file can be re-uploaded if needed
+    e.target.value = ""
   }
 
   return (
-    <label style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-      <span style={{ fontSize: 14, opacity: 0.85 }}>Upload</span>
-      <input
-        type="file"
-        accept=".csv,.json"
-        onChange={(e) => {
-          const f = e.target.files?.[0]
-          if (f) onUpload(f)
-          e.currentTarget.value = ""
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
+      <label
+        style={{
+          padding: "10px 12px",
+          borderRadius: 12,
+          border: "1px solid rgba(0,0,0,0.2)",
+          cursor: "pointer",
+          background: "transparent",
         }}
-      />
-    </label>
+      >
+        Upload
+        <input
+          type="file"
+          accept=".csv,.json"
+          onChange={onFileChange}
+          style={{ display: "none" }}
+        />
+      </label>
+
+      {/* Tiny hint */}
+      <div
+        style={{
+          marginTop: 6,
+          fontSize: 12,
+          opacity: 0.7,
+        }}
+      >
+        Need a template? Download below
+      </div>
+    </div>
   )
 }

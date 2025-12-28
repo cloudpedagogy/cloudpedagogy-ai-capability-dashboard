@@ -1,0 +1,37 @@
+period_start,period_end,domain,band,count,context_tag
+2025-09-01,2025-09-30,Awareness,emerging,120,education
+2025-09-01,2025-09-30,Awareness,developing,210,education
+2025-09-01,2025-09-30,Awareness,embedded,90,education
+2025-09-01,2025-09-30,Human–AI Co-Agency,emerging,160,education
+2025-09-01,2025-09-30,Human–AI Co-Agency,developing,190,education
+2025-09-01,2025-09-30,Human–AI Co-Agency,embedded,70,education
+2025-09-01,2025-09-30,Applied Practice & Innovation,emerging,180,education
+2025-09-01,2025-09-30,Applied Practice & Innovation,developing,170,education
+2025-09-01,2025-09-30,Applied Practice & Innovation,embedded,70,education
+2025-09-01,2025-09-30,Ethics, Equity & Impact,emerging,200,education
+2025-09-01,2025-09-30,Ethics, Equity & Impact,developing,160,education
+2025-09-01,2025-09-30,Ethics, Equity & Impact,embedded,60,education
+2025-09-01,2025-09-30,Decision-Making & Governance,emerging,230,education
+2025-09-01,2025-09-30,Decision-Making & Governance,developing,150,education
+2025-09-01,2025-09-30,Decision-Making & Governance,embedded,40,education
+2025-09-01,2025-09-30,Reflection, Learning & Renewal,emerging,210,education
+2025-09-01,2025-09-30,Reflection, Learning & Renewal,developing,150,education
+2025-09-01,2025-09-30,Reflection, Learning & Renewal,embedded,60,education
+2025-10-01,2025-10-31,Awareness,emerging,90,education
+2025-10-01,2025-10-31,Awareness,developing,220,education
+2025-10-01,2025-10-31,Awareness,embedded,110,education
+2025-10-01,2025-10-31,Human–AI Co-Agency,emerging,130,education
+2025-10-01,2025-10-31,Human–AI Co-Agency,developing,210,education
+2025-10-01,2025-10-31,Human–AI Co-Agency,embedded,80,education
+2025-10-01,2025-10-31,Applied Practice & Innovation,emerging,90,education
+2025-10-01,2025-10-31,Applied Practice & Innovation,developing,210,education
+2025-10-01,2025-10-31,Applied Practice & Innovation,embedded,120,education
+2025-10-01,2025-10-31,Ethics, Equity & Impact,emerging,170,education
+2025-10-01,2025-10-31,Ethics, Equity & Impact,developing,180,education
+2025-10-01,2025-10-31,Ethics, Equity & Impact,embedded,70,education
+2025-10-01,2025-10-31,Decision-Making & Governance,emerging,220,education
+2025-10-01,2025-10-31,Decision-Making & Governance,developing,160,education
+2025-10-01,2025-10-31,Decision-Making & Governance,embedded,40,education
+2025-10-01,2025-10-31,Reflection, Learning & Renewal,emerging,140,education
+2025-10-01,2025-10-31,Reflection, Learning & Renewal,developing,190,education
+2025-10-01,2025-10-31,Reflection, Learning & Renewal,embedded,90,education
