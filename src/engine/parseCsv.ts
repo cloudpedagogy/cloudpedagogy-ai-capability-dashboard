@@ -1,44 +1,41 @@
-import { CANONICAL_BANDS, CANONICAL_DOMAINS, type AggregatedRow } from "./schema"
+// src/engine/parseCsv.ts
 
-// Simple CSV parser (strict template; avoids quoting complexity)
-export function parseCSV(text: string): AggregatedRow[] {
-  const lines = text
+/**
+ * Very small CSV parser for this app.
+ * Assumptions:
+ * - First row is headers
+ * - Commas separate fields (no quoted commas support)
+ * - Trims whitespace
+ *
+ * This is sufficient for the dashboard template format.
+ */
+
+export type CsvRow = Record<string, string>
+
+export function parseCsv(text: string): CsvRow[] {
+  const trimmed = text.trim()
+  if (!trimmed) return []
+
+  const lines = trimmed
     .split(/\r?\n/)
-    .map(l => l.trim())
-    .filter(l => l.length > 0)
+    .map((l) => l.trim())
+    .filter((l) => l.length > 0)
 
-  if (lines.length < 2) throw new Error("CSV has no data rows.")
+  if (lines.length < 2) return []
 
-  const headers = lines[0].split(",").map(h => h.trim())
-  const required = ["period_start", "period_end", "domain", "band", "count"]
-  for (const r of required) {
-    if (!headers.includes(r)) throw new Error(`Missing required column: ${r}`)
-  }
+  const headers = lines[0].split(",").map((h) => h.trim())
 
-  const rows: AggregatedRow[] = []
+  const rows: CsvRow[] = []
+
   for (let i = 1; i < lines.length; i++) {
-    const cells = lines[i].split(",").map(c => c.trim())
-    const obj: any = {}
-    headers.forEach((h, idx) => {
-      obj[h] = cells[idx] ?? ""
-    })
+    const cols = lines[i].split(",").map((c) => c.trim())
+    const row: CsvRow = {}
 
-    obj.count = Number(obj.count)
-    if (obj.context_tag === "") delete obj.context_tag
-    if (obj.source === "") delete obj.source
-    if (obj.notes === "") delete obj.notes
-
-    if (!CANONICAL_DOMAINS.includes(obj.domain)) {
-      throw new Error(`Invalid domain "${obj.domain}" on line ${i + 1}`)
-    }
-    if (!CANONICAL_BANDS.includes(obj.band)) {
-      throw new Error(`Invalid band "${obj.band}" on line ${i + 1}`)
-    }
-    if (!Number.isFinite(obj.count) || obj.count < 0) {
-      throw new Error(`Invalid count "${String(obj.count)}" on line ${i + 1}`)
+    for (let j = 0; j < headers.length; j++) {
+      row[headers[j]] = cols[j] ?? ""
     }
 
-    rows.push(obj as AggregatedRow)
+    rows.push(row)
   }
 
   return rows
