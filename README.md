@@ -189,4 +189,12 @@ You may:
 
 Commercial use, resale, or incorporation into **paid products or services** is **not permitted** without explicit permission.
 
+---
+
+## About CloudPedagogy
+
+CloudPedagogy develops open, governance-credible resources for building confident, responsible AI capability across education, research, and public service.
+
+- Website: https://www.cloudpedagogy.com/
+- Framework: https://github.com/cloudpedagogy/cloudpedagogy-ai-capability-framework
 
