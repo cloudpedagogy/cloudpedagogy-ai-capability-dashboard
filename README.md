@@ -1,4 +1,4 @@
-# AI Capability Signals Dashboard
+# AI Capability Dashboard
 
 A lightweight, browser-based, **aggregate dashboard** for examining patterns and trends in AI capability over time, grounded in the **CloudPedagogy AI Capability Framework**.
 
@@ -7,6 +7,11 @@ The AI Capability Signals Dashboard supports **sense-making, reflection, and gov
 It is designed to help teams **notice patterns**, **surface tensions**, and **ask better questions**, not to measure performance or enforce compliance.
 
 This tool is part of the **CloudPedagogy AI Capability Tools** suite.
+
+---
+## 🌐 Live Application
+
+👉 http://cloudpedagogy-ai-capability-dashboard.s3-website.eu-west-2.amazonaws.com/
 
 ---
 ## 🛠️ Getting Started
