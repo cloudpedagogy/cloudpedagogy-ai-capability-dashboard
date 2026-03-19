@@ -9,9 +9,15 @@ It is designed to help teams **notice patterns**, **surface tensions**, and **as
 This tool is part of the **CloudPedagogy AI Capability Tools** suite.
 
 ---
-## 🌐 Live Application
+## 🌐 Live Hosted Version
 
 👉 http://cloudpedagogy-ai-capability-dashboard.s3-website.eu-west-2.amazonaws.com/
+
+---
+
+## 🖼️ Screenshot
+
+![AI Capability Dashboard Screenshot](./assets/screenshot.png)
 
 ---
 ## 🛠️ Getting Started
