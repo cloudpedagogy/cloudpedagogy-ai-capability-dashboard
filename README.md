@@ -167,37 +167,11 @@ The tool is explicitly designed to **avoid surveillance and performance monitori
 
 ## Disclaimer
 
-This repository contains exploratory, framework-aligned tools developed to support **reflection, discussion, and sense-making** around AI capability in education, research, and public-service contexts.
+This repository contains exploratory, framework-aligned tools developed for reflection, learning, and discussion.
 
-The tool is provided **as-is** for learning and experimentation.  
-It is **not production software**, **not a governance system**, and **not a compliance or benchmarking instrument**.
+These tools are provided **as-is** and are not production systems, audits, or compliance instruments. Outputs are indicative only and should be interpreted in context using professional judgement.
 
-All outputs are **indicative only** and must be interpreted in context, alongside professional judgement and local institutional requirements.
-
----
-
-## What these tools are for
-
-These tools are designed to:
-
-- Explore ideas related to the **CloudPedagogy AI Capability Framework**
-- Support **reflective, governance-aligned discussion**
-- Enable **capability-led organisational learning**
-- Demonstrate concepts through **lightweight, browser-based tools**
-
----
-
-## What these tools are not
-
-These tools are **not**:
-
-- ❌ Audits or formal evaluations  
-- ❌ Rankings, league tables, or maturity scores  
-- ❌ Monitoring or surveillance systems  
-- ❌ Automated decision-making or risk engines  
-- ❌ Substitutes for institutional governance or accountability  
-
-Responsibility for interpretation and any subsequent use remains with the **user or adopting institution**.
+All applications are designed to run locally in the browser. No user data is collected, stored, or transmitted.
 
 ---
 
@@ -205,13 +179,7 @@ Responsibility for interpretation and any subsequent use remains with the **user
 
 This repository contains open-source software released under the MIT License.
 
-CloudPedagogy frameworks, capability models, taxonomies, and training materials
-are separate intellectual works and are licensed independently (typically under
-Creative Commons Attribution–NonCommercial–ShareAlike 4.0).
-
-This software is designed to support capability-aligned workflows but does not
-embed or enforce any specific CloudPedagogy framework.
-
+CloudPedagogy frameworks and related materials are licensed separately and are not embedded or enforced within this software.
 
 ---
 
@@ -221,4 +189,3 @@ CloudPedagogy develops open, governance-credible resources for building confiden
 
 - Website: https://www.cloudpedagogy.com/
 - Framework: https://github.com/cloudpedagogy/cloudpedagogy-ai-capability-framework
-
