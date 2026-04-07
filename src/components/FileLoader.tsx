@@ -1,3 +1,4 @@
+// src/components/FileLoader.tsx
 import { useState } from "react"
 import { parseCsv } from "../engine/parseCsv"
 import type { AggregatedRow } from "../engine/schema"
@@ -35,25 +36,9 @@ export default function FileLoader(props: Props) {
   }
 
   return (
-    <div style={{ display: "flex", gap: 10, alignItems: "center" }}>
-      <label
-        style={{
-          position: "relative",
-          display: "inline-flex",
-          alignItems: "center",
-          justifyContent: "center",
-          padding: "10px 12px",
-          borderRadius: 12,
-          border: "1px solid rgba(0,0,0,0.2)",
-          cursor: "pointer",
-          userSelect: "none",
-          background: "transparent",
-          overflow: "hidden",
-        }}
-      >
-        Upload CSV/JSON
-
-        {/* Real input sits on top of label and captures the click (browser-native) */}
+    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+      <label className="cp-button-primary" style={{ position: "relative" }}>
+        <span>Upload Dataset</span>
         <input
           type="file"
           accept=".csv,.json,application/json,text/csv"
@@ -74,8 +59,9 @@ export default function FileLoader(props: Props) {
           }}
         />
       </label>
-
-      <div style={{ opacity: 0.8, fontSize: 13 }}>{filename}</div>
+      <div className="text-small text-muted" style={{ maxWidth: 150, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        {filename}
+      </div>
     </div>
   )
 }

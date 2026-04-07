@@ -1,4 +1,4 @@
-// ✅ NEW FILE: src/views/SignalsView.tsx
+// src/views/SignalsView.tsx
 import { useEffect, useMemo, useState } from "react"
 import type { Signal } from "../engine/signals"
 
@@ -21,9 +21,8 @@ function formatDateTime(d = new Date()) {
 }
 
 function safeKeyFromSignal(s: Signal) {
-  // stable key based on content (good enough for this use)
+  // stable key based on content
   const base = `${s.statement}__${s.prompt ?? ""}`
-  // lightweight hash
   let h = 0
   for (let i = 0; i < base.length; i++) h = (h * 31 + base.charCodeAt(i)) >>> 0
   return `sig_${h.toString(16)}`
@@ -68,7 +67,7 @@ export default function SignalsView(props: Props) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(notes))
     } catch {
-      // ignore (storage may be blocked)
+      // ignore
     }
   }, [notes])
 
@@ -103,7 +102,6 @@ export default function SignalsView(props: Props) {
     const stillExists = filtered.some((x) => x.key === activeKey)
     if (!stillExists && filtered.length > 0) setActiveKey(filtered[0].key)
     if (!stillExists && filtered.length === 0) setActiveKey(null)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query, showOnlyWithNotes, filtered.length])
 
   function setNote(key: string, value: string) {
@@ -111,6 +109,7 @@ export default function SignalsView(props: Props) {
   }
 
   function clearAllNotes() {
+    if (!window.confirm("Are you sure you want to clear all locally saved notes?")) return
     setNotes({})
     try {
       localStorage.removeItem(STORAGE_KEY)
@@ -135,40 +134,38 @@ export default function SignalsView(props: Props) {
       const parsed = JSON.parse(text) as any
       const imported = (parsed?.notes ?? parsed) as NoteMap
       if (!imported || typeof imported !== "object") return
-      // merge (import wins)
       setNotes((prev) => ({ ...prev, ...imported }))
     } catch {
-      // ignore; you can surface an error message later if you want
+      // ignore
     }
   }
 
   return (
-    <div style={{ marginTop: 14, display: "grid", gap: 12 }}>
-      {/* Header */}
-      <div style={{ padding: 16, border: "1px solid rgba(0,0,0,0.1)", borderRadius: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-          <div>
-            <div style={{ fontWeight: 700 }}>Signals workspace</div>
-            <div style={{ opacity: 0.85, marginTop: 4 }}>
-              Browse heuristic signals and capture reflection notes locally (stored only in your browser).
-            </div>
-            <div style={{ opacity: 0.75, marginTop: 6, fontSize: 13 }}>
-              Mode: {props.reflective ? "Reflective (prompts shown)" : "Descriptive (prompts hidden)"}
+    <div style={{ display: "grid", gap: 24 }}>
+      {/* Header Panel */}
+      <div className="cp-card" style={{ margin: 0, padding: 24 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 24, flexWrap: "wrap", alignItems: "flex-start" }}>
+          <div style={{ flex: 1, minWidth: 300 }}>
+            <h2 style={{ fontSize: "1.1rem", marginBottom: 4 }}>Signals Workspace</h2>
+            <p className="text-secondary text-small" style={{ margin: 0 }}>
+              Browse identified signals and capture reflection notes locally. Notes are stored in your browser and are not transmitted.
+            </p>
+            <div className="text-muted text-small" style={{ marginTop: 12 }}>
+              Mode: {props.reflective ? "Reflective" : "Descriptive"}
               {props.datasetLabel ? ` · ${props.datasetLabel}` : ""}
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 8, flexWrap: "wrap", alignItems: "center" }}>
-            <button onClick={exportNotes} style={{ padding: "8px 10px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.2)" }}>
-              Export notes (JSON)
+          <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+            <button className="cp-button-secondary text-small" onClick={exportNotes}>
+              Export Notes
             </button>
-
-            <label style={{ padding: "8px 10px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.2)", cursor: "pointer" }}>
-              Import notes
+            <label className="cp-button-secondary text-small" style={{ position: "relative", cursor: "pointer" }}>
+              <span>Import Notes</span>
               <input
                 type="file"
                 accept="application/json"
-                style={{ display: "none" }}
+                style={{ position: "absolute", inset: 0, opacity: 0, cursor: "pointer" }}
                 onChange={(e) => {
                   const f = e.target.files?.[0]
                   if (f) importNotes(f)
@@ -176,61 +173,54 @@ export default function SignalsView(props: Props) {
                 }}
               />
             </label>
-
-            <button
-              onClick={clearAllNotes}
-              style={{ padding: "8px 10px", borderRadius: 10, border: "1px solid rgba(180,0,0,0.35)" }}
-              title="Clears all locally saved notes"
-            >
-              Clear notes
+            <button className="cp-button-secondary text-small" onClick={clearAllNotes} style={{ color: "var(--color-text-secondary)" }}>
+              Clear Local Storage
             </button>
           </div>
         </div>
       </div>
 
-      {/* Controls */}
-      <div style={{ padding: 16, border: "1px solid rgba(0,0,0,0.1)", borderRadius: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
-          <div style={{ display: "flex", gap: 10, flexWrap: "wrap", alignItems: "center" }}>
-            <label style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
-              <span style={{ fontWeight: 650 }}>Search</span>
+      {/* Constraints & Filters */}
+      <div className="cp-card" style={{ margin: 0, padding: 16, background: "#F9FAFB", border: "none" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", gap: 24, flexWrap: "wrap", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: 24, flexWrap: "wrap", alignItems: "center" }}>
+            <div style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
+              <span className="semibold text-small">Search Signals</span>
               <input
+                className="text-small"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Filter statements / prompts…"
-                style={{ padding: "8px 10px", borderRadius: 10, border: "1px solid rgba(0,0,0,0.2)", minWidth: 260 }}
+                placeholder="Filter by keyword or prompt..."
+                style={{ minWidth: 300, padding: "8px 12px" }}
               />
-            </label>
+            </div>
 
-            <label style={{ display: "inline-flex", gap: 8, alignItems: "center" }}>
+            <label style={{ display: "inline-flex", gap: 10, alignItems: "center", cursor: "pointer" }}>
               <input
                 type="checkbox"
                 checked={showOnlyWithNotes}
                 onChange={(e) => setShowOnlyWithNotes(e.target.checked)}
               />
-              <span style={{ opacity: 0.9 }}>Only show signals with notes</span>
+              <span className="text-small semibold">Show only signals with notes</span>
             </label>
           </div>
 
-          <div style={{ opacity: 0.85 }}>
-            Showing <b>{filtered.length}</b> of <b>{signalItems.length}</b> signals · Notes saved:{" "}
-            <b>{Object.values(notes).filter((v) => v.trim().length > 0).length}</b>
+          <div className="text-small text-muted">
+            <b>{filtered.length}</b> of <b>{signalItems.length}</b> signals identified
           </div>
         </div>
       </div>
 
-      {/* Main workspace */}
-      <div style={{ display: "grid", gridTemplateColumns: "420px 1fr", gap: 12 }}>
-        {/* List */}
-        <div style={{ padding: 16, border: "1px solid rgba(0,0,0,0.1)", borderRadius: 16 }}>
-          <div style={{ fontWeight: 700 }}>Signals</div>
-
+      {/* Workspace Grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr", gap: 24, minHeight: 600 }}>
+        {/* List Section */}
+        <div className="cp-card" style={{ margin: 0, display: "flex", flexDirection: "column" }}>
+          <h3 className="text-small semibold" style={{ marginBottom: 16 }}>Identified Signals</h3>
+          
           {filtered.length === 0 ? (
-            <div style={{ marginTop: 10, opacity: 0.85 }}>
-              No signals match the current filter.
-            </div>
+            <div className="text-muted text-small">No signals match the current filters.</div>
           ) : (
-            <div style={{ marginTop: 10, display: "grid", gap: 8 }}>
+            <div style={{ flex: 1, overflowY: "auto", display: "grid", gap: 8, alignContent: "flex-start" }}>
               {filtered.map((it, idx) => {
                 const isActive = it.key === activeKey
                 const hasNote = !!it.note.trim()
@@ -240,19 +230,20 @@ export default function SignalsView(props: Props) {
                     onClick={() => setActiveKey(it.key)}
                     style={{
                       textAlign: "left",
-                      padding: 10,
-                      borderRadius: 12,
-                      border: isActive ? "2px solid rgba(0,0,0,0.35)" : "1px solid rgba(0,0,0,0.15)",
-                      background: "transparent",
+                      padding: "16px",
+                      borderRadius: 6,
+                      border: "1px solid var(--color-border-default)",
+                      background: isActive ? "#F9FAFB" : "transparent",
                       cursor: "pointer",
+                      borderColor: isActive ? "var(--color-text-primary)" : "var(--color-border-default)",
+                      transition: "all 0.1s ease",
                     }}
                   >
-                    <div style={{ display: "flex", justifyContent: "space-between", gap: 10 }}>
-                      <div style={{ fontWeight: 650 }}>{idx + 1}. {it.signal.statement}</div>
-                      {hasNote && <div style={{ opacity: 0.75, fontSize: 12 }}>📝</div>}
-                    </div>
-                    <div style={{ opacity: 0.75, marginTop: 4, fontSize: 13 }}>
-                      {props.reflective ? "Prompt available" : "Prompt hidden in Descriptive mode"}
+                    <div style={{ display: "flex", justifyContent: "space-between", gap: 12 }}>
+                      <div className="semibold text-small" style={{ color: isActive ? "var(--color-text-primary)" : "#444444" }}>
+                        {idx + 1}. {it.signal.statement}
+                      </div>
+                      {hasNote && <span title="Has notes" style={{ fontSize: 12 }}>●</span>}
                     </div>
                   </button>
                 )
@@ -261,70 +252,64 @@ export default function SignalsView(props: Props) {
           )}
         </div>
 
-        {/* Detail + notes */}
-        <div style={{ padding: 16, border: "1px solid rgba(0,0,0,0.1)", borderRadius: 16, minHeight: 320 }}>
+        {/* Workspace Detail Section */}
+        <div className="cp-card" style={{ margin: 0, display: "flex", flexDirection: "column" }}>
           {!active ? (
-            <div style={{ opacity: 0.85 }}>
-              Select a signal to view details and add notes.
+            <div className="text-muted text-small" style={{ margin: "auto", textAlign: "center" }}>
+              Select a signal from the list to begin reflection.
             </div>
           ) : (
             <>
-              <div style={{ fontWeight: 700 }}>Signal</div>
-              <div style={{ marginTop: 8, fontWeight: 650 }}>{active.signal.statement}</div>
+              <div style={{ marginBottom: 32 }}>
+                <h3 className="text-small semibold" style={{ marginBottom: 8 }}>Signal Statement</h3>
+                <div style={{ fontSize: "1.1rem", fontWeight: 600 }}>{active.signal.statement}</div>
+              </div>
 
-              <div style={{ marginTop: 10 }}>
-                <div style={{ fontWeight: 650 }}>Interpretation</div>
-                <div style={{ opacity: 0.85, marginTop: 6 }}>
-                  {props.reflective
-                    ? active.signal.prompt
-                    : "Switch to Reflective mode to reveal the discussion prompt for this signal."}
+              <div style={{ marginBottom: 32 }}>
+                <h3 className="text-small semibold" style={{ marginBottom: 12 }}>Reflective Interpretation</h3>
+                <div style={{ padding: 16, background: "#F9FAFB", borderLeft: "4px solid var(--color-text-primary)", borderRadius: 4 }}>
+                  {props.reflective ? (
+                    <div className="text-secondary" style={{ fontStyle: "italic", lineHeight: 1.6 }}>{active.signal.prompt}</div>
+                  ) : (
+                    <div className="text-muted text-small">Reflective prompts are hidden in Descriptive mode.</div>
+                  )}
                 </div>
               </div>
 
-              <div style={{ marginTop: 14 }}>
-                <div style={{ fontWeight: 650 }}>Your notes (local only)</div>
-                <div style={{ opacity: 0.75, marginTop: 6, fontSize: 13 }}>
-                  Saved in your browser (localStorage). Not transmitted or stored by CloudPedagogy.
-                </div>
-
+              <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+                <h3 className="text-small semibold" style={{ marginBottom: 8 }}>Reflection Notes</h3>
+                <p className="text-muted text-small" style={{ marginBottom: 12 }}>
+                  Capture institutional context, hypotheses, or proposed actions. These notes are stored locally.
+                </p>
                 <textarea
+                  className="text-small"
                   value={notes[active.key] ?? ""}
                   onChange={(e) => setNote(active.key, e.target.value)}
-                  placeholder="Capture context, hypotheses, actions, questions…"
+                  placeholder="Type your reflections here..."
                   style={{
-                    marginTop: 8,
+                    flex: 1,
                     width: "100%",
-                    minHeight: 180,
-                    resize: "vertical",
-                    padding: 12,
-                    borderRadius: 12,
-                    border: "1px solid rgba(0,0,0,0.2)",
-                    fontFamily: "inherit",
-                    fontSize: 14,
+                    minHeight: 300,
+                    padding: 16,
+                    borderRadius: 6,
+                    border: "1px solid var(--color-border-default)",
+                    resize: "none",
                   }}
                 />
               </div>
-
-              {props.reflective && (
-                <div style={{ marginTop: 12, padding: 12, border: "1px dashed rgba(0,0,0,0.25)", borderRadius: 12 }}>
-                  <div style={{ fontWeight: 650 }}>Reminder</div>
-                  <div style={{ opacity: 0.85, marginTop: 6 }}>
-                    Signals are heuristic prompts for discussion, not findings. Avoid converting outputs into monitoring or performance measures.
-                  </div>
-                </div>
-              )}
             </>
           )}
         </div>
       </div>
 
-      {/* Ethics note */}
-      <div style={{ padding: 16, border: "1px solid rgba(0,0,0,0.1)", borderRadius: 16 }}>
-        <div style={{ fontWeight: 700 }}>Ethical use note</div>
-        <div style={{ opacity: 0.85, marginTop: 8 }}>
-          This workspace is designed for reflective sense-making. Notes are stored locally in your browser and can be exported by you.
-          Do not use this tool to infer individual performance or to enable surveillance practices.
-        </div>
+      {/* Privacy & Governance Note */}
+      <div className="cp-card" style={{ margin: 0, background: "#F9FAFB", border: "none" }}>
+        <h3 className="text-small semibold" style={{ marginBottom: 8 }}>Governance & Privacy Note</h3>
+        <p className="text-muted text-small" style={{ margin: 0 }}>
+          This workspace is designed for aggregate sense-making and professional judgement. 
+          Notes remain strictly local to your browser session. 
+          CloudPedagogy avoids individual-level tracking and performance management features by design.
+        </p>
       </div>
     </div>
   )

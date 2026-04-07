@@ -19,8 +19,7 @@ import { deriveSignals } from "./engine/signals"
 
 /**
  * Interpretation badge (always visible when a dataset is loaded)
- * - Includes tooltip explaining the two modes (via native title attribute)
- * - Will also appear in print/export because it's part of the DOM (and we add print-friendly styles below)
+ * - Monochrome, minimalist design for institutional context.
  */
 function InterpretationBadge(props: { mode: Interpretation }) {
   const isReflective = props.mode === "reflective"
@@ -34,26 +33,26 @@ function InterpretationBadge(props: { mode: Interpretation }) {
   return (
     <div
       title={tooltip}
+      className="text-small semibold"
       style={{
         marginTop: 10,
         display: "inline-flex",
         alignItems: "center",
         gap: 8,
-        padding: "7px 12px",
-        borderRadius: 999,
-        fontSize: 13,
-        fontWeight: 650,
-        background: isReflective ? "rgba(0,120,0,0.08)" : "rgba(0,0,0,0.04)",
-        border: `1px solid ${isReflective ? "rgba(0,120,0,0.35)" : "rgba(0,0,0,0.25)"}`,
+        padding: "6px 12px",
+        borderRadius: 4,
+        background: "#F9FAFB",
+        border: "1px solid var(--color-border-default)",
         userSelect: "none",
+        color: "var(--color-text-secondary)",
       }}
     >
-      <span style={{ opacity: 0.85 }}>Interpretation:</span>
-      <span>{isReflective ? "Reflective" : "Descriptive"}</span>
-      <span style={{ opacity: 0.7, fontWeight: 500 }}>
+      <span style={{ opacity: 0.75 }}>Interpretation:</span>
+      <span style={{ color: "var(--color-text-primary)" }}>{isReflective ? "Reflective" : "Descriptive"}</span>
+      <span className="text-muted" style={{ fontWeight: 400 }}>
         {isReflective ? "· prompts shown" : "· patterns only"}
       </span>
-      <span style={{ opacity: 0.55, fontWeight: 600 }} aria-hidden="true">
+      <span className="text-muted" style={{ fontWeight: 500 }} aria-hidden="true">
         ⓘ
       </span>
     </div>
@@ -124,63 +123,55 @@ export default function App() {
       : ""
 
   return (
-    <div style={{ maxWidth: 1120, margin: "0 auto", padding: 24, fontFamily: "system-ui, sans-serif" }}>
-      {/* Print-friendly styles: keeps badge visible and adds subtle border to sections */}
-      <style>{`
-        @media print {
-          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-          /* Ensure controls + badge remain visible in print */
-          .cp-print-keep { display: block !important; }
-          /* Avoid awkward page breaks inside cards */
-          .cp-card { break-inside: avoid; page-break-inside: avoid; }
-          /* Hide upload controls and dataset change button in print */
-          .cp-hide-print { display: none !important; }
-        }
-      `}</style>
+    <div className="max-width-container">
+      {/* ───────── Minimal Header ───────── */}
+      <header style={{ marginBottom: 32 }}>
+        <a 
+          href="https://www.cloudpedagogy.com/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-small semibold text-muted"
+          style={{ marginBottom: 4, display: "block" }}
+        >
+          CloudPedagogy
+        </a>
+        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 24 }}>
+          <div>
+            <h1 style={{ margin: 0 }}>AI Capability Dashboard</h1>
+            <p className="text-secondary" style={{ marginTop: 4, marginBottom: 0 }}>
+              Aggregate, non-identifiable capability signals for institutional reflection.
+            </p>
+          </div>
 
-      {/* ───────── Header ───────── */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
-        <div>
-          <div style={{ fontSize: 20, fontWeight: 700 }}>AI Capability Dashboard (Aggregate View)</div>
-          <div style={{ opacity: 0.8 }}>
-            Aggregate, non-identifiable capability signals to support system-level reflection over time.
+          <div className="cp-hide-print" style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            {rows && (
+              <button
+                onClick={resetToStart}
+                className="cp-button-secondary"
+                title="Return to the start screen to load a different dataset"
+              >
+                Change dataset
+              </button>
+            )}
+
+            <FileLoader onLoaded={(r) => load(r)} onError={onFileError} />
           </div>
         </div>
-
-        <div className="cp-hide-print" style={{ display: "flex", gap: 10, alignItems: "center" }}>
-          {rows && (
-            <button
-              onClick={resetToStart}
-              style={{
-                padding: "10px 12px",
-                borderRadius: 12,
-                border: "1px solid rgba(0,0,0,0.2)",
-                cursor: "pointer",
-                background: "transparent",
-              }}
-              title="Return to the start screen to load a different dataset"
-            >
-              Change dataset
-            </button>
-          )}
-
-          <FileLoader onLoaded={(r) => load(r)} onError={onFileError} />
-        </div>
-      </div>
+      </header>
 
       <EthicsBanner />
 
       {/* ───────── Errors ───────── */}
       {error && (
-        <div className="cp-card" style={{ marginTop: 16, padding: 12, border: "1px solid rgba(180,0,0,0.4)", borderRadius: 12 }}>
-          <div style={{ fontWeight: 650 }}>Could not load dataset</div>
-          <div style={{ marginTop: 6, whiteSpace: "pre-wrap" }}>{error}</div>
+        <div className="cp-card" style={{ borderLeft: "4px solid #111111" }}>
+          <div className="semibold">Could not load dataset</div>
+          <div className="text-secondary" style={{ marginTop: 6, whiteSpace: "pre-wrap" }}>{error}</div>
         </div>
       )}
 
       {/* ───────── Empty State (two demo buttons) ───────── */}
       {!rows && !error && (
-        <div className="cp-card">
+        <div className="cp-card" style={{ padding: 0 }}>
           <EmptyState
             onUseBaselineDemo={() => load(DEMO_ROWS)}
             onUseInterventionDemo={() => load(DEMO_UNEVEN_ROWS)}
@@ -205,7 +196,7 @@ export default function App() {
           </div>
 
           {/* Interpretation badge (visible in all views + print) */}
-          <div className="cp-print-keep">
+          <div className="cp-print-keep" style={{ marginBottom: 24 }}>
             <InterpretationBadge mode={interpretation} />
           </div>
 
@@ -249,10 +240,12 @@ export default function App() {
         </>
       )}
 
-      {/* ───────── Footer ───────── */}
-      <div style={{ marginTop: 28, opacity: 0.75, fontSize: 13 }}>
-        CloudPedagogy · AI Capability Dashboard · Static, privacy-preserving aggregation (no identifiers).
-      </div>
+      {/* ───────── Minimal Footer ───────── */}
+      <footer style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--color-border-default)" }}>
+        <div className="text-small text-muted">
+          CloudPedagogy · Governance-ready AI and curriculum systems
+        </div>
+      </footer>
     </div>
   )
 }

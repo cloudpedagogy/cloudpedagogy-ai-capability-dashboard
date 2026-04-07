@@ -1,9 +1,10 @@
+// src/components/EthicsBanner.tsx
 export default function EthicsBanner() {
   return (
-    <div style={{ marginTop: 16, padding: 12, border: "1px solid rgba(0,0,0,0.12)", borderRadius: 14 }}>
-      <div style={{ fontWeight: 650 }}>This tool supports awareness, not monitoring.</div>
-      <div style={{ opacity: 0.85, marginTop: 6 }}>
-        This dashboard shows aggregated patterns only. It is not designed for performance management, surveillance, or ranking.
+    <div className="cp-card" style={{ borderLeft: "4px solid var(--color-text-primary)", marginBottom: 24 }}>
+      <div className="semibold">Institutional Awareness Tool · Non-Monitoring</div>
+      <div className="text-secondary text-small" style={{ marginTop: 4 }}>
+        This dashboard presents aggregated patterns only. It is not designed for performance management, surveillance, or individual ranking.
       </div>
     </div>
   )

@@ -192,7 +192,9 @@ All example data and structures are synthetic and do not represent any real inst
 
 This repository contains open-source software released under the MIT License.
 
-CloudPedagogy frameworks and related materials are licensed separately and are not embedded or enforced within this software.
+CloudPedagogy frameworks, capability models, taxonomies, and training materials are separate intellectual works and are licensed independently (typically under Creative Commons Attribution–NonCommercial–ShareAlike 4.0).
+
+This software is designed to support capability-aligned workflows but does not embed or enforce any specific CloudPedagogy framework.
 
 ---
 
@@ -202,3 +204,4 @@ CloudPedagogy develops open, governance-credible resources for building confiden
 
 - Website: https://www.cloudpedagogy.com/
 - Framework: https://github.com/cloudpedagogy/cloudpedagogy-ai-capability-framework
+
