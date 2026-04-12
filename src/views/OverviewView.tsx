@@ -8,8 +8,9 @@ import {
   Tooltip,
   Legend,
   CartesianGrid,
+  ReferenceLine,
 } from "recharts"
-import type { DomainDistribution } from "../engine/aggregate"
+import { type DomainDistribution, identifyGaps, computeDatasetAverageIndex } from "../engine/aggregate"
 import type { Signal } from "../engine/signals"
 import StatCard from "../components/StatCard"
 
@@ -29,9 +30,9 @@ const BAND_COLOURS = {
 } as const
 
 const BAND_LABELS: Record<keyof typeof BAND_COLOURS, string> = {
-  emerging: "Emerging",
+  emerging: "Low",
   developing: "Developing",
-  embedded: "Embedded",
+  embedded: "Strong",
 }
 
 function formatNumber(n: number) {
@@ -55,8 +56,57 @@ function tooltipValueFormatter(value: any, name: any) {
 }
 
 export default function OverviewView(props: Props) {
+  const avgIndex = computeDatasetAverageIndex(props.dists)
+  const gaps = identifyGaps(props.dists)
+
   return (
     <div style={{ display: "grid", gap: 24 }}>
+      {/* Insight Layer: Gaps & Benchmarks */}
+      {gaps.length > 0 && (
+        <div className="cp-card cp-print-keep" style={{ margin: 0, padding: 20, borderLeft: "4px solid #111111", background: "#f9fafb" }}>
+          <div className="semibold" style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ fontSize: "1.2rem" }}>⚠</span> Capability Maturity Gaps
+          </div>
+          <p className="text-secondary text-small" style={{ marginTop: 8, marginBottom: 0 }}>
+            The following domains are currently performing more than 15% below the active dataset average index (avg = {avgIndex}):
+            <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+              {gaps.map(g => (
+                <span key={g} className="text-small semibold" style={{ padding: "4px 10px", background: "#EEE", borderRadius: 4 }}>{g}</span>
+              ))}
+            </div>
+          </p>
+        </div>
+      )}
+
+      {/* Key Insights Panel */}
+      <div className="cp-card cp-print-keep" style={{ margin: 0, padding: 20, borderLeft: "4px solid var(--color-text-primary)", background: "#ffffff" }}>
+        <h3 className="semibold" style={{ fontSize: "0.9rem", marginBottom: 12 }}>Institutional Insights</h3>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          {(() => {
+            const domainScores = props.dists.map(d => ({
+              domain: d.domain,
+              weighted: (d.embedded * 3 + d.developing * 2 + d.emerging * 1) / (d.embedded + d.developing + d.emerging || 1)
+            })).sort((a, b) => b.weighted - a.weighted);
+            
+            const strongest = domainScores[0];
+            const weakest = domainScores[domainScores.length - 1];
+
+            return (
+              <>
+                <div style={{ padding: 12, border: "1px solid #f3f4f6", borderRadius: 4 }}>
+                  <div className="text-muted text-small semibold uppercase tracking-wider">Strongest Domain</div>
+                  <div className="semibold" style={{ marginTop: 4 }}>{strongest.domain}</div>
+                </div>
+                <div style={{ padding: 12, border: "1px solid #f3f4f6", borderRadius: 4 }}>
+                  <div className="text-muted text-small semibold uppercase tracking-wider">Weakest Domain</div>
+                  <div className="semibold" style={{ marginTop: 4 }}>{weakest.domain}</div>
+                </div>
+              </>
+            );
+          })()}
+        </div>
+      </div>
+
       {/* Stats */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
         <StatCard label="Total count (N)" value={formatNumber(props.total)} />
@@ -115,6 +165,16 @@ export default function OverviewView(props: Props) {
               <Bar dataKey="emerging" stackId="a" fill={BAND_COLOURS.emerging} radius={[0, 0, 0, 0]} />
               <Bar dataKey="developing" stackId="a" fill={BAND_COLOURS.developing} radius={[0, 0, 0, 0]} />
               <Bar dataKey="embedded" stackId="a" fill={BAND_COLOURS.embedded} radius={[0, 0, 0, 0]} />
+
+              {/* Dataset Benchmark Line (Average Count/Scale approximation for distribution view) */}
+              {/* Note: ReferenceLines in stacked bars compare against stack totals. 
+                  In this view, we want to show the 'average' height as a target. */}
+              <ReferenceLine 
+                y={props.total / props.dists.length} 
+                stroke="#111" 
+                strokeDasharray="3 3" 
+                label={{ position: 'top', value: 'Avg distribution', fill: '#111', fontSize: 11, fontWeight: 600 }} 
+              />
             </BarChart>
           </ResponsiveContainer>
         </div>

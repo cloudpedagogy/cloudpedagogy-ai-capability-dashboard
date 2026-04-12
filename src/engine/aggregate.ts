@@ -59,3 +59,25 @@ export function bandWeightedIndex(dist: DomainDistribution): number {
   const w = (dist.emerging * 1 + dist.developing * 2 + dist.embedded * 3) / dist.total
   return Number(w.toFixed(2))
 }
+
+export function computeDatasetAverageIndex(dists: DomainDistribution[]): number {
+  const activeDists = dists.filter(d => d.total > 0)
+  if (activeDists.length === 0) return 0
+  const total = activeDists.reduce((acc, d) => acc + bandWeightedIndex(d), 0)
+  return Number((total / activeDists.length).toFixed(2))
+}
+
+export function identifyGaps(dists: DomainDistribution[], threshold = 0.15): Domain[] {
+  const avg = computeDatasetAverageIndex(dists)
+  if (avg === 0) return []
+  
+  const gaps: Domain[] = []
+  for (const d of dists) {
+    if (d.total === 0) continue
+    const index = bandWeightedIndex(d)
+    if (index < avg * (1 - threshold)) {
+      gaps.push(d.domain)
+    }
+  }
+  return gaps
+}

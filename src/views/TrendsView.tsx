@@ -10,7 +10,7 @@ import {
   CartesianGrid,
 } from "recharts"
 import type { AggregatedRow, Domain } from "../engine/schema"
-import { computePeriodDistributions, computeTrendSeries, getDomainKeys } from "../engine/trends"
+import { computePeriodDistributions, computeTrendSeries, getDomainKeys, calculateTrendDeltas } from "../engine/trends"
 
 type Props = {
   rows: AggregatedRow[]
@@ -34,6 +34,7 @@ export default function TrendsView(props: Props) {
   const periodDists = computePeriodDistributions(props.rows)
   const series = computeTrendSeries(periodDists)
   const domains = getDomainKeys() as Domain[]
+  const deltas = calculateTrendDeltas(series)
 
   if (periodDists.length < 2) {
     return (
@@ -49,8 +50,36 @@ export default function TrendsView(props: Props) {
     )
   }
 
+  // Trajectory logic (descriptive only)
+  const totalDelta = deltas.reduce((acc, d) => acc + d.delta, 0)
+  const improvedCount = deltas.filter(d => d.delta > 0).length
+  const regressedCount = deltas.filter(d => d.delta < 0).length
+
   return (
     <div style={{ display: "grid", gap: 24 }}>
+      {/* Trend Insights */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div className="cp-card cp-print-keep" style={{ margin: 0, padding: 20, background: "#f9fafb" }}>
+          <div className="semibold text-small">Longitudinal Trajectory</div>
+          <p className="text-secondary text-small" style={{ marginTop: 8, marginBottom: 0 }}>
+            Across the last two periods, <b>{improvedCount}</b> domains showed score progression and <b>{regressedCount}</b> showed regression.
+            The cumulative weighted index shift is <b>{totalDelta > 0 ? "+" : ""}{totalDelta.toFixed(2)}</b>.
+          </p>
+        </div>
+        <div className="cp-card cp-print-keep" style={{ margin: 0, padding: 20 }}>
+          <div className="text-small">
+            {deltas.map(d => (
+              <div key={d.domain} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 4 }}>
+                <span className="text-secondary" style={{ fontSize: 12 }}>{d.domain}</span>
+                <span className="semibold" style={{ fontSize: 13, color: d.delta > 0 ? "#059669" : d.delta < 0 ? "#dc2626" : "#666" }}>
+                  {d.delta > 0 ? "▲" : d.delta < 0 ? "▼" : "—"} {d.delta > 0 ? "+" : ""}{d.delta}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       <div className="cp-card" style={{ margin: 0, padding: 24 }}>
         <h2 style={{ fontSize: "1.1rem", marginBottom: 8 }}>Trends over Time (Weighted Index)</h2>
         <p className="text-secondary text-small" style={{ marginBottom: 24 }}>

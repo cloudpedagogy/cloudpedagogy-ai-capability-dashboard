@@ -79,9 +79,31 @@ export function computeTrendSeries(periodDists: PeriodDistribution[]): TrendPoin
   })
 }
 
-/**
- * Helpful for legend/tooltip ordering and picking lines to show.
- */
 export function getDomainKeys(): Domain[] {
   return [...CANONICAL_DOMAINS]
+}
+
+export type TrendDelta = {
+  domain: Domain
+  current: number
+  previous: number
+  delta: number
+}
+
+export function calculateTrendDeltas(series: TrendPoint[]): TrendDelta[] {
+  if (series.length < 2) return []
+
+  const current = series[series.length - 1]
+  const previous = series[series.length - 2]
+
+  return CANONICAL_DOMAINS.map(d => {
+    const currVal = Number(current[d] ?? 0)
+    const prevVal = Number(previous[d] ?? 0)
+    return {
+      domain: d,
+      current: currVal,
+      previous: prevVal,
+      delta: Number((currVal - prevVal).toFixed(2))
+    }
+  })
 }

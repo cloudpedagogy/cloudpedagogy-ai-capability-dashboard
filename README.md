@@ -2,6 +2,25 @@
 
 A lightweight, browser-based, **aggregate dashboard** for examining patterns and trends in AI capability over time, grounded in the **CloudPedagogy AI Capability Framework**.
 
+## 🔗 Role in the CloudPedagogy Ecosystem
+
+**Phase:** Phase 3 — Capability System
+
+**Role:**
+Aggregates and visualizes organizational AI capability signals to surface structural trends, maturity gaps, and longitudinal benchmarks.
+
+**Upstream Inputs:**
+Aggregate datasets or individual JSON snapshots from the **Capability Assessment Tool**.
+
+**Downstream Outputs:**
+Provides multi-dimensional insight for the **Gaps & Risk** diagnostic and strategic institutional review committees.
+
+**Does NOT:**
+- Perform granular individual performance tracking.
+- Test organizational resilience against specific risk scenarios (this is for the Stress Test).
+
+For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
+
 The AI Capability Signals Dashboard supports **sense-making, reflection, and governance-aligned conversation** about how AI capability is developing across an organisation — without surveillance, benchmarking, or individual assessment.
 
 It is designed to help teams **notice patterns**, **surface tensions**, and **ask better questions**, not to measure performance or enforce compliance.
@@ -55,10 +74,27 @@ The production build will be generated in the `dist/` directory and can be deplo
 
 ## 🔐 Privacy & Security
 
-- **Fully local**: All data remains in the user's browser  
-- **No backend**: No external API calls or database storage  
-- **Privacy-preserving**: No tracking or data exfiltration  
-- Suitable for use in sensitive organisational and governance contexts  
+### Strategic Context
+- **Aggregation-Only**: Designed to consolidate non-identifiable capability data from Assessment snapshots.
+- **Internal Benchmarking**: Compares domains against the active dataset average to identify structural lags.
+- **Gap Detection**: Visually highlights "Maturity Gaps" where specific domains underperform relative to the institution.
+- **Longitudinal Insight**: Provides trajectory summaries and delta tracking across multiple periods.
+
+---
+
+## 📊 Strategic Evaluation Features
+
+This dashboard has been strengthened to serve as the primary insight layer for institutional capability:
+
+### 1. Maturity Gap Identification
+The dashboard automatically identifies "Gaps" — domains where the weighted maturity index is more than **15% below the dataset average**. This allows institutions to prioritize investment where structural weakness is highest.
+
+### 2. Dataset-Level Benchmarking
+The overview chart includes a target benchmark line representing the average distribution across all domains. This provides an immediate visual baseline for internal comparison.
+
+### 3. Trend Delta Indicators
+The trends view includes numerical 🔼/🔽 indicators showing the precise shift in maturity index between the two most recent periods, categorized into **Improved** and **Regressed** trajectory summaries.
+ational and governance contexts  
 
 ---
 
@@ -127,11 +163,16 @@ These domains act as **lenses**, not checklists.
    - No individual-level data is required or supported  
 3. Optionally add **timepoints** to compare capability signals over time  
 4. View the dashboard to explore:
-   - domain-level patterns and trends  
-   - emerging imbalances or tensions  
-   - areas of acceleration, stagnation, or lag  
-5. Use the built-in **reflective prompts** to support discussion, sense-making, and governance conversations  
-6. Export or print summaries for committee papers, workshops, or documentation  
+   - `[x]` Engine & Calculation Updates
+    - `[x]` Update `src/engine/aggregate.ts` with gap detection logic (15% threshold)
+    - `[x]` Update `src/engine/trends.ts` with delta and trajectory calculations
+- `[x]` UI: Gaps & Benchmarks
+    - `[x]` Update `src/views/OverviewView.tsx` with Gap Overlay and Dataset Benchmark Line
+- `[x]` UI: Trends & Insights
+    - `[x]` Update `src/views/TrendsView.tsx` with Trend Delta Indicators and Insight Summary Panel
+- `[x]` Finalisation
+    - `[x]` Update `README.md` with insight layer documentation
+  
 
 The tool is designed to be used **collectively and deliberatively**, not mechanically.
 
