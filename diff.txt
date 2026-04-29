@@ -1,0 +1,147 @@
+diff --git a/INSTRUCTIONS.md b/INSTRUCTIONS.md
+index 471fa5a..9e3657a 100644
+--- a/INSTRUCTIONS.md
++++ b/INSTRUCTIONS.md
+@@ -46,3 +46,18 @@ This dashboard aggregates individual capability assessments into a system-wide v
+ ---
+ ### 10. Tips
+ - Always use the "Reflective" mode during meetings to turn dry data into productive inquiries.
++
++---
++### 11. Capability and Governance
++
++**What the tool does**
++This tool allows users to aggregate capability datasets and explore macro patterns across six core AI domains, translating numeric trends into reflective prompts.
++
++**How capability is developed through use**
++Capability is not developed by simply viewing the data, but through the structured sense-making and dialog that occurs when users interact with the dashboard's reflective modes. The interface guides teams to interpret systemic patterns together.
++
++**How governance is supported**
++Governance is supported by making the rationale and context behind the data visible. This ensures that the insights drawn from the dashboard are critically analyzed and bounded by documented constraints, avoiding automated assumptions.
++
++**Explanation of optional fields**
++The tool provides optional fields (e.g., Capability Notes, Governance Notes) allowing users to document specific assumptions, risks, and rationale related to the data or their interpretation of it. These fields exist to ensure that the human judgement and context surrounding the insights are explicitly captured and reviewable.
+diff --git a/PROJECT_SPEC.md b/PROJECT_SPEC.md
+index 0d04bcf..b707d14 100644
+--- a/PROJECT_SPEC.md
++++ b/PROJECT_SPEC.md
+@@ -53,3 +53,12 @@ Might overlap with generic business intelligence (BI) tools, but uniquely hardco
+ 
+ ## 15. Anything Unclear or Inferred from Repo Contents
+ The exact mapping between raw 1-5 assessment scores and the "Emerging-Embedded" bands is inferred to be handled during the aggregation step before loading into the dashboard.
++
++## 16. Capability and Governance Alignment
++
++This tool is aligned with the CloudPedagogy Capability and Governance standard.
++
++- Capability: The tool supports development of practical AI capability through structured interaction and workflow use.
++- Governance: The tool includes lightweight, optional fields that make assumptions, risks, and decisions visible and reviewable.
++
++This alignment ensures the tool supports both effective use of AI and responsible, accountable practice.
+diff --git a/README.md b/README.md
+index e124d7e..d9653bf 100644
+--- a/README.md
++++ b/README.md
+@@ -19,7 +19,6 @@ Provides multi-dimensional insight for the **Gaps & Risk** diagnostic and strate
+ - Perform granular individual performance tracking.
+ - Test organizational resilience against specific risk scenarios (this is for the Stress Test).
+ 
+-For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
+ 
+ The AI Capability Signals Dashboard supports **sense-making, reflection, and governance-aligned conversation** about how AI capability is developing across an organisation — without surveillance, benchmarking, or individual assessment.
+ 
+@@ -239,6 +238,17 @@ This software is designed to support capability-aligned workflows but does not e
+ 
+ ---
+ 
++## Capability and Governance
++
++This tool supports both AI capability development and lightweight governance.
++
++- Capability is developed through structured interaction with real workflows
++- Governance is supported through optional fields that make assumptions, risks, and decisions visible
++
++All governance inputs are optional and designed to support — not constrain — professional judgement.
++
++---
++
+ ## About CloudPedagogy
+ 
+ CloudPedagogy develops open, governance-credible resources for building confident, responsible AI capability across education, research, and public service.
+diff --git a/src/App.tsx b/src/App.tsx
+index cce3849..e496729 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -67,6 +67,12 @@ export default function App() {
+   const [interpretation, setInterpretation] = useState<Interpretation>("descriptive")
+   const [context, setContext] = useState<string>("") // "" = all
+ 
++  // Lightweight capability and governance layer
++  // Optional, non-blocking, and does not alter core workflow
++  const [capabilityNotes, setCapabilityNotes] = useState<string>("")
++  const [governanceNotes, setGovernanceNotes] = useState<string>("")
++
++
+   // ─────────────────────────────────────────────
+   // Filtering
+   // ─────────────────────────────────────────────
+@@ -240,6 +246,59 @@ export default function App() {
+         </>
+       )}
+ 
++      {/* ───────── Capability & Governance Layer ───────── */}
++      {rows && (
++        <details className="cp-card cp-print-keep" style={{ marginTop: 24, fontSize: "0.9em" }}>
++          <summary style={{ cursor: "pointer", fontWeight: 600, color: "var(--color-text-secondary)" }}>
++            Capability & Governance Notes (Optional)
++          </summary>
++          <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 16 }}>
++            <div>
++              <label style={{ display: "block", marginBottom: 4, fontWeight: 500, color: "var(--color-text-secondary)" }}>
++                Capability Notes
++              </label>
++              <textarea
++                value={capabilityNotes}
++                onChange={(e) => setCapabilityNotes(e.target.value)}
++                placeholder="E.g. How does this dashboard support capability development?"
++                style={{
++                  width: "100%",
++                  minHeight: 80,
++                  padding: 8,
++                  fontFamily: "inherit",
++                  border: "1px solid var(--color-border-default)",
++                  borderRadius: 4,
++                  background: "transparent",
++                  color: "var(--color-text-primary)",
++                  boxSizing: "border-box"
++                }}
++              />
++            </div>
++            <div>
++              <label style={{ display: "block", marginBottom: 4, fontWeight: 500, color: "var(--color-text-secondary)" }}>
++                Governance Notes
++              </label>
++              <textarea
++                value={governanceNotes}
++                onChange={(e) => setGovernanceNotes(e.target.value)}
++                placeholder="E.g. Assumptions, risks, or contextual limitations of this data."
++                style={{
++                  width: "100%",
++                  minHeight: 80,
++                  padding: 8,
++                  fontFamily: "inherit",
++                  border: "1px solid var(--color-border-default)",
++                  borderRadius: 4,
++                  background: "transparent",
++                  color: "var(--color-text-primary)",
++                  boxSizing: "border-box"
++                }}
++              />
++            </div>
++          </div>
++        </details>
++      )}
++
+       {/* ───────── Minimal Footer ───────── */}
+       <footer style={{ marginTop: 48, paddingTop: 24, borderTop: "1px solid var(--color-border-default)" }}>
+         <div className="text-small text-muted">

@@ -19,7 +19,6 @@ Provides multi-dimensional insight for the **Gaps & Risk** diagnostic and strate
 - Perform granular individual performance tracking.
 - Test organizational resilience against specific risk scenarios (this is for the Stress Test).
 
-For a full system overview, see: [SYSTEM_OVERVIEW.md](../SYSTEM_OVERVIEW.md)
 
 The AI Capability Signals Dashboard supports **sense-making, reflection, and governance-aligned conversation** about how AI capability is developing across an organisation — without surveillance, benchmarking, or individual assessment.
 
@@ -236,6 +235,17 @@ This repository contains open-source software released under the MIT License.
 CloudPedagogy frameworks, capability models, taxonomies, and training materials are separate intellectual works and are licensed independently (typically under Creative Commons Attribution–NonCommercial–ShareAlike 4.0).
 
 This software is designed to support capability-aligned workflows but does not embed or enforce any specific CloudPedagogy framework.
+
+---
+
+## Capability and Governance
+
+This tool supports both AI capability development and lightweight governance.
+
+- Capability is developed through structured interaction with real workflows
+- Governance is supported through optional fields that make assumptions, risks, and decisions visible
+
+All governance inputs are optional and designed to support — not constrain — professional judgement.
 
 ---
 

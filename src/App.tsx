@@ -67,6 +67,12 @@ export default function App() {
   const [interpretation, setInterpretation] = useState<Interpretation>("descriptive")
   const [context, setContext] = useState<string>("") // "" = all
 
+  // Lightweight capability and governance layer
+  // Optional, non-blocking, and does not alter core workflow
+  const [capabilityNotes, setCapabilityNotes] = useState<string>("")
+  const [governanceNotes, setGovernanceNotes] = useState<string>("")
+
+
   // ─────────────────────────────────────────────
   // Filtering
   // ─────────────────────────────────────────────
@@ -238,6 +244,59 @@ export default function App() {
             </div>
           )}
         </>
+      )}
+
+      {/* ───────── Capability & Governance Layer ───────── */}
+      {rows && (
+        <details className="cp-card cp-print-keep" style={{ marginTop: 24, fontSize: "0.9em" }}>
+          <summary style={{ cursor: "pointer", fontWeight: 600, color: "var(--color-text-secondary)" }}>
+            Capability & Governance Notes (Optional)
+          </summary>
+          <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 16 }}>
+            <div>
+              <label style={{ display: "block", marginBottom: 4, fontWeight: 500, color: "var(--color-text-secondary)" }}>
+                Capability Notes
+              </label>
+              <textarea
+                value={capabilityNotes}
+                onChange={(e) => setCapabilityNotes(e.target.value)}
+                placeholder="E.g. How does this dashboard support capability development?"
+                style={{
+                  width: "100%",
+                  minHeight: 80,
+                  padding: 8,
+                  fontFamily: "inherit",
+                  border: "1px solid var(--color-border-default)",
+                  borderRadius: 4,
+                  background: "transparent",
+                  color: "var(--color-text-primary)",
+                  boxSizing: "border-box"
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ display: "block", marginBottom: 4, fontWeight: 500, color: "var(--color-text-secondary)" }}>
+                Governance Notes
+              </label>
+              <textarea
+                value={governanceNotes}
+                onChange={(e) => setGovernanceNotes(e.target.value)}
+                placeholder="E.g. Assumptions, risks, or contextual limitations of this data."
+                style={{
+                  width: "100%",
+                  minHeight: 80,
+                  padding: 8,
+                  fontFamily: "inherit",
+                  border: "1px solid var(--color-border-default)",
+                  borderRadius: 4,
+                  background: "transparent",
+                  color: "var(--color-text-primary)",
+                  boxSizing: "border-box"
+                }}
+              />
+            </div>
+          </div>
+        </details>
       )}
 
       {/* ───────── Minimal Footer ───────── */}

@@ -46,3 +46,18 @@ This dashboard aggregates individual capability assessments into a system-wide v
 ---
 ### 10. Tips
 - Always use the "Reflective" mode during meetings to turn dry data into productive inquiries.
+
+---
+### 11. Capability and Governance
+
+**What the tool does**
+This tool allows users to aggregate capability datasets and explore macro patterns across six core AI domains, translating numeric trends into reflective prompts.
+
+**How capability is developed through use**
+Capability is not developed by simply viewing the data, but through the structured sense-making and dialog that occurs when users interact with the dashboard's reflective modes. The interface guides teams to interpret systemic patterns together.
+
+**How governance is supported**
+Governance is supported by making the rationale and context behind the data visible. This ensures that the insights drawn from the dashboard are critically analyzed and bounded by documented constraints, avoiding automated assumptions.
+
+**Explanation of optional fields**
+The tool provides optional fields (e.g., Capability Notes, Governance Notes) allowing users to document specific assumptions, risks, and rationale related to the data or their interpretation of it. These fields exist to ensure that the human judgement and context surrounding the insights are explicitly captured and reviewable.
