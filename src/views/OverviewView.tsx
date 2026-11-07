@@ -39,17 +39,17 @@ function formatNumber(n: number) {
   return new Intl.NumberFormat("en-GB").format(n)
 }
 
-function axisTickFormatter(value: any) {
+function axisTickFormatter(value: unknown) {
   const s = String(value)
   if (s.length <= 18) return s
   return s.slice(0, 18) + "…"
 }
 
-function tooltipLabelFormatter(label: any) {
+function tooltipLabelFormatter(label: unknown) {
   return String(label)
 }
 
-function tooltipValueFormatter(value: any, name: any) {
+function tooltipValueFormatter(value: unknown, name: unknown) {
   const key = String(name) as keyof typeof BAND_LABELS
   const label = BAND_LABELS[key] ?? String(name)
   return [formatNumber(Number(value)), label]

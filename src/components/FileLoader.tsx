@@ -30,8 +30,8 @@ export default function FileLoader(props: Props) {
       }
 
       props.onError("Unsupported file type. Please upload a .csv or .json file.")
-    } catch (e: any) {
-      props.onError(`Could not read file.\n\n${e?.message ?? String(e)}`)
+    } catch (e: unknown) {
+      props.onError(`Could not read file.\n\n${e instanceof Error ? e.message : String(e)}`)
     }
   }
 

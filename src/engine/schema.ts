@@ -36,7 +36,7 @@ export type AggregatedRow = {
  * - numeric counts
  * - no identifiers
  */
-export function parseAggregatedRows(input: any[]): AggregatedRow[] {
+export function parseAggregatedRows(input: unknown): AggregatedRow[] {
   if (!Array.isArray(input)) {
     throw new Error("Uploaded data must be an array of rows.")
   }
@@ -44,15 +44,16 @@ export function parseAggregatedRows(input: any[]): AggregatedRow[] {
   const rows: AggregatedRow[] = []
 
   for (const r of input) {
-    if (!r) continue
+    if (!r || typeof r !== "object") continue
+    const obj = r as Record<string, unknown>
 
     const row: AggregatedRow = {
-      period_start: String(r.period_start ?? "").trim(),
-      period_end: String(r.period_end ?? "").trim(),
-      domain: r.domain as Domain,
-      band: r.band as Band,
-      count: Number(r.count),
-      context_tag: r.context_tag ? String(r.context_tag).trim() : undefined,
+      period_start: String(obj.period_start ?? "").trim(),
+      period_end: String(obj.period_end ?? "").trim(),
+      domain: obj.domain as Domain,
+      band: obj.band as Band,
+      count: Number(obj.count),
+      context_tag: obj.context_tag ? String(obj.context_tag).trim() : undefined,
     }
 
     if (!row.period_start || !row.period_end) {
@@ -60,15 +61,15 @@ export function parseAggregatedRows(input: any[]): AggregatedRow[] {
     }
 
     if (!CANONICAL_DOMAINS.includes(row.domain)) {
-      throw new Error(`Unknown domain value: "${r.domain}"`)
+      throw new Error(`Unknown domain value: "${String(obj.domain)}"`)
     }
 
     if (!["emerging", "developing", "embedded"].includes(row.band)) {
-      throw new Error(`Invalid band value: "${r.band}"`)
+      throw new Error(`Invalid band value: "${String(obj.band)}"`)
     }
 
     if (!Number.isFinite(row.count) || row.count < 0) {
-      throw new Error(`Invalid count value: "${r.count}"`)
+      throw new Error(`Invalid count value: "${String(obj.count)}"`)
     }
 
     rows.push(row)

@@ -45,22 +45,20 @@ async function readFileAsText(file: File) {
 }
 
 export default function SignalsView(props: Props) {
-  const [notes, setNotes] = useState<NoteMap>({})
-  const [query, setQuery] = useState("")
-  const [showOnlyWithNotes, setShowOnlyWithNotes] = useState(false)
-  const [activeKey, setActiveKey] = useState<string | null>(null)
-
-  // Load saved notes
-  useEffect(() => {
+  const [notes, setNotes] = useState<NoteMap>(() => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
+      if (!raw) return {}
       const parsed = JSON.parse(raw) as NoteMap
-      if (parsed && typeof parsed === "object") setNotes(parsed)
+      if (parsed && typeof parsed === "object") return parsed
     } catch {
       // ignore
     }
-  }, [])
+    return {}
+  })
+  const [query, setQuery] = useState("")
+  const [showOnlyWithNotes, setShowOnlyWithNotes] = useState(false)
+  const [selectedKey, setSelectedKey] = useState<string | null>(null)
 
   // Persist notes
   useEffect(() => {
@@ -88,21 +86,18 @@ export default function SignalsView(props: Props) {
     })
   }, [signalItems, query, showOnlyWithNotes])
 
+  // Derive active key: if user selected a key still in filtered items use it; else default to first filtered item
+  const activeKey = useMemo(() => {
+    if (selectedKey && filtered.some((x) => x.key === selectedKey)) {
+      return selectedKey
+    }
+    return filtered.length > 0 ? filtered[0].key : null
+  }, [selectedKey, filtered])
+
   const active = useMemo(() => {
     if (!activeKey) return null
     return signalItems.find((s) => s.key === activeKey) ?? null
   }, [activeKey, signalItems])
-
-  // Keep active selection sensible if filters change
-  useEffect(() => {
-    if (!activeKey) {
-      if (filtered.length > 0) setActiveKey(filtered[0].key)
-      return
-    }
-    const stillExists = filtered.some((x) => x.key === activeKey)
-    if (!stillExists && filtered.length > 0) setActiveKey(filtered[0].key)
-    if (!stillExists && filtered.length === 0) setActiveKey(null)
-  }, [query, showOnlyWithNotes, filtered.length])
 
   function setNote(key: string, value: string) {
     setNotes((prev) => ({ ...prev, [key]: value }))
@@ -131,8 +126,9 @@ export default function SignalsView(props: Props) {
   async function importNotes(file: File) {
     try {
       const text = await readFileAsText(file)
-      const parsed = JSON.parse(text) as any
-      const imported = (parsed?.notes ?? parsed) as NoteMap
+      const parsed = JSON.parse(text) as unknown
+      const record = parsed as Record<string, unknown> | null
+      const imported = (record && typeof record === "object" && "notes" in record ? record.notes : record) as NoteMap
       if (!imported || typeof imported !== "object") return
       setNotes((prev) => ({ ...prev, ...imported }))
     } catch {
@@ -227,7 +223,7 @@ export default function SignalsView(props: Props) {
                 return (
                   <button
                     key={it.key}
-                    onClick={() => setActiveKey(it.key)}
+                    onClick={() => setSelectedKey(it.key)}
                     style={{
                       textAlign: "left",
                       padding: "16px",

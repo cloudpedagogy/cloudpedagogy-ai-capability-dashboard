@@ -108,7 +108,7 @@ export default function TrendsView(props: Props) {
               />
 
               <Tooltip
-                formatter={(value: any, name: any) => [formatNumber(Number(value)), String(name)]}
+                formatter={(value: unknown, name: unknown) => [formatNumber(Number(value)), String(name)]}
                 labelFormatter={(label) => String(label)}
                 contentStyle={{ borderRadius: 4, border: "1px solid var(--color-border-default)", boxShadow: "none" }}
               />

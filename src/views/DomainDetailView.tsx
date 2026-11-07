@@ -128,7 +128,7 @@ export default function DomainDetailView(props: Props) {
                   margin={{ top: 0, right: 16, left: 16, bottom: 0 }}
                 >
                   <Tooltip
-                    formatter={(value: any, name: any) => [formatNumber(Number(value)), BAND_LABELS[name as Band] ?? String(name)]}
+                    formatter={(value: unknown, name: unknown) => [formatNumber(Number(value)), BAND_LABELS[name as Band] ?? String(name)]}
                     contentStyle={{ borderRadius: 4, border: "1px solid var(--color-border-default)", boxShadow: "none" }}
                   />
                   <Legend
@@ -186,7 +186,7 @@ export default function DomainDetailView(props: Props) {
                    stroke="var(--color-border-default)"
                 />
                 <Tooltip
-                  formatter={(value: any, name: any) => [formatNumber(Number(value)), BAND_LABELS[name as Band] ?? String(name)]}
+                  formatter={(value: unknown, name: unknown) => [formatNumber(Number(value)), BAND_LABELS[name as Band] ?? String(name)]}
                   labelFormatter={(label) => String(label)}
                   contentStyle={{ borderRadius: 4, border: "1px solid var(--color-border-default)", boxShadow: "none" }}
                 />
